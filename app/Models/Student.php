@@ -30,9 +30,9 @@ class Student extends Model
     }
 
     public function supervisor()
-{
-    return $this->belongsToMany(Supervisor::class, 'assign_models', 'supervisor_id', 'student_id');
-}
+    {
+        return $this->hasOne(AssignModel::class);
+    }
 
 
     public function program()
