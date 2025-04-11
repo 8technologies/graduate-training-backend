@@ -34,7 +34,7 @@ class ProgramRequest extends FormRequest
                 "required",
                 "integer",
                 Rule::exists('milestone_profiles', 'id')->where(function ($query) {
-                    $query->where('university_id', request()->input('university_id'));
+                    $query->where('university_id', request()->user()->university_id);
                 }),
             ],
 
