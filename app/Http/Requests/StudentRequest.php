@@ -25,17 +25,17 @@ class StudentRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'telephone' => 'required|string|max:15',
+            'telephone' => 'required|string',
             'password' => 'required|string|min:6',
             'university_id' => 'nullable|exists:universities,id',
             'program_id' => 'required|exists:programs,id',
             'student_in_take_id' => 'required|exists:student_in_takes,id',
             "student_number" => 'nullable',
             'Date_of_birth' => 'nullable',
-            'address' => 'nullable|string|max:15',
-            'gender' => 'nullable|string|max:15',
-            'sponsorship_type_id' => 'required|integer|max:15',
-            'training_status' => 'required|string|max:15',
+            'address' => 'nullable|string',
+            'gender' => 'nullable|string',
+            'sponsorship_type_id' => 'required|integer',
+            'training_status' => 'required|string',
         ];
     }
 }

@@ -42,7 +42,7 @@ class StudentController extends Controller
             $user->sendEmailVerificationNotification();
             event(new GlobalEvent(
                 $validated['email'],
-                "Your default password is: {$validated['password']}. You are advised to change it.",
+                "Your default password is: {$validated['student_number']}. You are advised to change it.",
                 'Welcome'
             ));
             return $this->responseSuccess($user, "Student created successfully", JsonResponse::HTTP_CREATED);
