@@ -56,8 +56,6 @@ Route::apiResources([
 ]);
 
 
-Route::apiResource('urole.permission', RolePermissionController::class)->only(['index', 'store']);
-
 Route::apiResources([
     'roles' => RoleController::class
 ]);

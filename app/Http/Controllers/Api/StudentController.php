@@ -12,6 +12,7 @@ use App\Models\Student;
 use App\Http\Requests\StudentRequest;
 use App\Events\GlobalEvent;
 use App\Models\Supervisor;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -38,6 +39,8 @@ class StudentController extends Controller
             $user->student()->Create(
                 $validated
             );
+
+            $user->assignRole('student');
 
             $user->sendEmailVerificationNotification();
             event(new GlobalEvent(

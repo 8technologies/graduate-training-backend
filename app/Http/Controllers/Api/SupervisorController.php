@@ -112,6 +112,7 @@ class SupervisorController extends Controller
                 ], 
             );
 
+            $supervisor->assignRole('supervisor');
             // Load relationships
             $supervisor->load(['university', 'program', 'supervisor']);
 
