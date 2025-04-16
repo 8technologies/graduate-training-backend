@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\ProgramTrackController;
 use App\Http\Controllers\Api\DurationUnitController;
 use App\Http\Controllers\Api\MilestoneProfileController;
 use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\api\ComplaintController;
 use App\Http\Controllers\Api\ExaminerController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\SponsorshipTypeController;
@@ -58,6 +59,10 @@ Route::apiResources([
 
 Route::apiResources([
     'roles' => RoleController::class
+]);
+// student progress
+Route::apiResources([
+    'complaints' => ComplaintController::class
 ]);
 
 
@@ -104,6 +109,11 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResources([
         'student_progress' => StudentMilestoneSubmissionController::class
     ]);
+
+     // student progress
+    // Route::apiResources([
+    //     'complaints' => ComplaintController::class
+    // ]);
 
     Route::post('signoff/{id}', [StudentMilestoneSubmissionController::class, 'signoff']);
 

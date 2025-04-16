@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('receiver_id')->constrained()->onDelete('cascade');
+            $table->foreignId('supervisor_id')->constrained('users');
+            $table->foreignId('registrar_id')->nullable()->constrained('users');
             $table->string('subject');
             $table->text('description');
-            $table->enum('status', ['pending', 'in_progress', 'resolved'])->default('pending');
-            $table->text('Comment');
+            $table->text('response')->nullable();
+            $table->enum('status', ['pending', 'in_progress', 'resolved', 'forwarded'])->default('pending');
+            $table->timestamp('submitted_at');
             $table->timestamps();
         });
     }
