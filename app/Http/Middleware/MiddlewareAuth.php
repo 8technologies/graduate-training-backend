@@ -88,7 +88,7 @@ class MiddlewareAuth extends Authenticate
 
             $Authorization = '';
 
-            foreach (['Authorization', 'authorization', 'Authorizations', 'authorizations', 'Tok'] as $key) {
+            foreach (['Authorization', 'authorization', 'Authorizations', 'authorizations', 'Tok', 'tok'] as $key) {
                 if (!empty($headers[$key])) {
                     $Authorization = $headers[$key];
                     break;
