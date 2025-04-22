@@ -16,7 +16,7 @@ use App\Models\Role;
 class User extends Authenticatable
 {
 
-    use HasRoles;
+    use HasApiTokens, HasRoles;
 
     protected $fillable = [
         'first_name',
