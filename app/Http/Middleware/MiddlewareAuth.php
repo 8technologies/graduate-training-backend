@@ -100,7 +100,7 @@ class MiddlewareAuth extends Authenticate
             }
 
             // Set header correctly for Laravel Passport to work
-            $request->headers->set('Authorization', 'Bearer ' . $Authorization);
+            $request->headers->set('Authorization', $Authorization);
 
             Log::info(['guards' => $guards]);
             Log::info(['request' => $request]);
