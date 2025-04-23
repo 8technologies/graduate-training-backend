@@ -23,7 +23,7 @@ use App\Http\Controllers\Api\ProgramTrackController;
 use App\Http\Controllers\Api\DurationUnitController;
 use App\Http\Controllers\Api\MilestoneProfileController;
 use App\Http\Controllers\Api\ActivityController;
-use App\Http\Controllers\api\ComplaintController;
+use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\ExaminerController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\SponsorshipTypeController;
@@ -35,6 +35,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
+Route::get('/')->name('login');
 Route::post('login', [AuthController::class, 'Login']);
 
 Route::apiResources([
