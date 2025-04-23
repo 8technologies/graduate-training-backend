@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplaintRequest;
 use App\Models\Complaint;
+use App\Models\Supervisor;
 use App\Traits\HttpApiResponseTrait;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class ComplaintController extends Controller
 
     public function index()
     {
-        $complaints = Complaint::all();
+        // $complaints = Complaint::all();
+        $complaints = Complaint::with('student', 'supervisor', 'registrar')->get();
         return $this->responseSuccess($complaints, 'Successfully retrieved all complaints');
 
     }
