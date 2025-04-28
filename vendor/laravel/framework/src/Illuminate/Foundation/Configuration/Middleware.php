@@ -778,8 +778,6 @@ class Middleware
     protected function defaultAliases()
     {
         $aliases = [
-            'passport-auth' =>\App\Http\Middleware\MiddlewareAuth::class,
-
             'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
             'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
             'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
