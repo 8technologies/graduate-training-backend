@@ -43,17 +43,14 @@ class ComplaintController extends Controller
 public function update(Request $request, string $id)
 {
     $validated = $request->validate([
-        'user_id'=> 'required|exists:users,id',
-            'registrar_id'=>'nullable||exists:users,id' ,
-            'supervisor_id'=> 'required|exists:users,id',
-            'subject'=> 'required|string',
-            'description' => 'required|string',
-            'response' => 'nullable|string',
-            'status' => '',
+        'response' => 'nullable|string',
+        'status' => '',
             
     ]);
-    $complaint= Complaint::create($validated);
+    $complaint = Complaint::find($id);
+
     $complaint->update($validated);
+
 
     return$this->responseSuccess('Complaint submitted successfully.', $complaint);
 }
