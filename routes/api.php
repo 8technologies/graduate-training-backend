@@ -73,7 +73,7 @@ Route::apiResources([
 
 Route::get('supervisor/students/{id}', [SupervisorController::class, 'assigned_students']);
 
-Route::middleware([ 'passport-auth'/*, 'auth:api'*/])->group(function () {
+Route::middleware([MiddlewareAuth::class])->group(function () {
     Route::get("milestone/profile/{id}", [TrainingScheduleController::class, 'getMilestoneForProfile']);
     Route::apiResources([
         'milestone_profiles' => MilestoneProfileController::class
