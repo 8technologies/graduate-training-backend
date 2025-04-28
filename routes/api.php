@@ -29,7 +29,7 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\SponsorshipTypeController;
 use App\Http\Controllers\Api\StudentMilestoneSubmissionController;
 use App\Http\Controllers\Api\RolePermissionController;
-
+use App\Http\Middleware\MiddlewareAuth;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
