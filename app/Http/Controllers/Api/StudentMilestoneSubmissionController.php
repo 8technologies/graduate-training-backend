@@ -9,6 +9,7 @@ use App\Traits\HttpApiResponseTrait;
 use App\Models\Milestone;
 use App\Models\MilestoneSubmission;
 use App\Models\Program;
+use App\Models\Student;
 use App\Models\ProgramTrack;
 use App\Models\StudentMilestoneSubmission ;
 use Illuminate\Http\JsonResponse;
@@ -70,10 +71,11 @@ class StudentMilestoneSubmissionController extends Controller
         if($milestone->requires_submission == 1){
             $filePath = $request->file('documents')->store('uploads/milestones');
         }
-        
+        $studentId = Student::where('user_id', auth()->id())->value('id');
+
         // Save record in database
         $submission = new StudentMilestoneSubmission();
-        $submission->student_id = auth()->id();
+        $submission->student_id = $studentId;
         $submission->milestone_id = $validated['milestone_id'];
         $submission->documents = $filePath;
         $submission->description = $validated['description'];
