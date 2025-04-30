@@ -37,7 +37,8 @@ class StudentMilestoneSubmissionController extends Controller
          // Format milestones list with status
          $milestoneList = $milestones->map(function ($milestone) use ($submissions) {
              return [
-                 'id' => $milestone->id,
+                 'submission_id' => isset($submissions[$milestone->id]) ? $submissions[$milestone->id]->id : null,
+                 'milestone_id' => $milestone->id,
                  'name' => $milestone->name,
                  'status' => isset($submissions[$milestone->id]) ? 'Completed' : 'Not Completed'
              ];
