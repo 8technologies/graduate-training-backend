@@ -123,11 +123,11 @@ class StudentMilestoneSubmissionController extends Controller
     {
         $submission = StudentMilestoneSubmission::findOrFail($submissionId);
 
-        if ($submission->student_id !== auth()->id()) {
-            abort(403, 'Unauthorized');
-        }
+        // if ($submission->student_id !== auth()->id()) {
+        //     abort(403, 'Unauthorized');
+        // }
 
-        return Storage::download($submission->file_path);
+        return Storage::download($submission->documents);
     }
 
     /**

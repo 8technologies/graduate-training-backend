@@ -116,6 +116,8 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
     //     'complaints' => ComplaintController::class
     // ]);
 
+    Route::get('/submissions/{id}/download', [StudentMilestoneSubmissionController::class, 'download']);
+
     Route::post('signoff/{id}', [StudentMilestoneSubmissionController::class, 'signoff']);
 
 
