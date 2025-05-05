@@ -18,7 +18,7 @@ class ComplaintController extends Controller
     public function index()
     {
         // $complaints = Complaint::all();
-        $complaints = Complaint::with('student', 'supervisor', 'registrar')->get();
+        $complaints = Complaint::with('student', 'supervisor', 'registrar', 'messages.sender')->get();
         return $this->responseSuccess($complaints, 'Successfully retrieved all complaints');
 
     }
@@ -48,13 +48,8 @@ class ComplaintController extends Controller
         $complaint = Complaint::findOrFail($id);
 
         $validated = $request->validate([
-            'response' => 'nullable|string',
             'status' => 'nullable|in:open,in_progress,resolved,closed',
         ]);
-
-        if ($request->has('response')) {
-            $validated['responded_at'] = now(); // Track time of response
-        }
 
         $complaint->update($validated);
 
