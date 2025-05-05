@@ -24,35 +24,62 @@ class ComplaintController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'user_id'=> 'required|exists:users,id',
-            'registrar_id'=>'nullable||exists:users,id' ,
-            'supervisor_id'=> 'required|exists:users,id',
-            'subject'=> 'required|string',
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'supervisor_id' => 'required|exists:users,id',
+            'subject' => 'required|string',
             'description' => 'required|string',
+        ]);
+
+        $validated['status'] = 'pending'; // Default status
+        $validated['submitted_at'] = now(); // Optional: track submission time
+
+        $complaint = Complaint::create($validated);
+
+        return response()->json([
+            'message' => 'Complaint submitted successfully.',
+            'data' => $complaint
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $complaint = Complaint::findOrFail($id);
+
+        $validated = $request->validate([
             'response' => 'nullable|string',
-            'status' => '',
-            
-    ]);
-    Complaint::create($validated);
+            'status' => 'nullable|in:open,in_progress,resolved,closed',
+        ]);
 
-    return response()->json(['message' => 'Complaint submitted successfully.']);
-}
+        if ($request->has('response')) {
+            $validated['responded_at'] = now(); // Track time of response
+        }
 
-public function update(Request $request, string $id)
-{
-    $validated = $request->validate([
-        'response' => 'nullable|string',
-        'status' => '',
-            
-    ]);
-    $complaint = Complaint::find($id);
+        $complaint->update($validated);
 
-    $complaint->update($validated);
+        return $this->responseSuccess($complaint, 'Complaint updated successfully.');
+    }
 
+    public function reply(Request $request, $complaintId)
+    {
+        $request->validate([
+            'message' => 'required|string',
+        ]);
 
-    return$this->responseSuccess('Complaint submitted successfully.', $complaint);
-}
+        $complaint = Complaint::findOrFail($complaintId);
+
+        $message = $complaint->messages()->create([
+            'sender_id' => auth()->id(),
+            'message' => $request->message,
+        ]);
+
+        // Optionally update complaint status
+        if ($complaint->status === 'pending') {
+            $complaint->update(['status' => 'in_progress']);
+        }
+
+        return response()->json(['message' => 'Reply added', 'data' => $message]);
+    }
 
 }

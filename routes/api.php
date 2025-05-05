@@ -62,10 +62,9 @@ Route::apiResources([
     'roles' => RoleController::class
 ]);
 // student progress
-Route::apiResources([
-    'complaints' => ComplaintController::class
-]);
-
+// Route::apiResources([
+//     'complaints' => ComplaintController::class
+// ]);
 
 Route::apiResources([
     'student_intakes' => StudentInTakeController::class
@@ -112,9 +111,12 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
     ]);
 
      // student progress
-    // Route::apiResources([
-    //     'complaints' => ComplaintController::class
-    // ]);
+    Route::apiResources([
+        'complaints' => ComplaintController::class
+    ]);
+
+    Route::post('complaints/reply/{id}' , [ComplaintController::class, 'reply']);
+
 
     Route::get('/submissions/{id}/download', [StudentMilestoneSubmissionController::class, 'download']);
 

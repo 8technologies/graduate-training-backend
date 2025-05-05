@@ -28,4 +28,11 @@ class Complaint extends Model
     public function registrar() {
         return $this->belongsTo(User::class, 'registrar_id');
     }
+
+    //complaint messages
+    public function messages()
+    {
+        return $this->hasMany(ComplaintMessage::class, 'complaint_id');
+    }
+
 }
