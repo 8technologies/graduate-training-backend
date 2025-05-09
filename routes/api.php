@@ -109,6 +109,8 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
     Route::apiResources([
         'student_progress' => StudentMilestoneSubmissionController::class
     ]);
+    Route::post('/student_progress/{submission}/versions', [StudentMilestoneSubmissionController::class, 'addVersion']);
+    
 
      // student progress
     Route::apiResources([
@@ -120,7 +122,7 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
 
     Route::get('/submissions/{id}/download', [StudentMilestoneSubmissionController::class, 'download']);
 
-    Route::post('signoff/{id}', [StudentMilestoneSubmissionController::class, 'signoff']);
+    Route::post('signoff', [StudentMilestoneSubmissionController::class, 'approveVersion']);
 
 
 });
