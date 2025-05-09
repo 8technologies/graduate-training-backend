@@ -88,6 +88,8 @@ class StudentMilestoneSubmissionController extends Controller
             'milestone_id' => $submission->milestone_id,
             'status' => $submission->status,
             'versions' => $versions,
+            'approved_version' =>$submission->approvedVersion(),
+            'latest_version' => $submission->latestVersion()
         ];
     });
 
