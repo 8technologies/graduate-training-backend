@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Student;
 use App\Http\Requests\StudentRequest;
 use App\Events\GlobalEvent;
+use App\Models\Examiner;
 use App\Models\Supervisor;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,7 +24,7 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $students = Student::where(['university_id' => $request->user()->university_id])->with('program', 'user', 'studentIntake', 'sponsorshipType', 'supervisor')->get();
+        $students = Student::where(['university_id' => $request->user()->university_id])->with('program', 'user', 'studentIntake', 'sponsorshipType', 'supervisor', 'user.assignedExaminers')->get();
         return $this->responseSuccess($students, 'Successfully retrieved all Students');
     }
     /**

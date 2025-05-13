@@ -110,7 +110,8 @@ class User extends Authenticatable
     // If user is a student
     public function assignedExaminers()
     {
-        return $this->belongsToMany(User::class, 'examiner_student', 'student_id', 'examiner_id');
+        return $this->hasOne(ExaminerStudent::class, 'student_id');
+        // return $this->belongsToMany(User::class, 'examiner_student', 'student_id', 'examiner_id');
     }
 
 }

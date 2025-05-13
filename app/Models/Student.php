@@ -34,6 +34,11 @@ class Student extends Model
         return $this->hasOne(AssignModel::class);
     }
 
+    public function examiner()
+    {
+        return $this->hasOne(ExaminerStudent::class);
+    }
+
 
     public function program()
     {
