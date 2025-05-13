@@ -101,5 +101,16 @@ class User extends Authenticatable
         $this->notify(new \App\Notifications\VerifyEmail);
     }
 
+    // If user is an examiner
+    public function assignedStudents()
+    {
+        return $this->belongsToMany(User::class, 'examiner_student', 'examiner_id', 'student_id');
+    }
+
+    // If user is a student
+    public function assignedExaminers()
+    {
+        return $this->belongsToMany(User::class, 'examiner_student', 'student_id', 'examiner_id');
+    }
 
 }

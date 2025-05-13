@@ -207,4 +207,18 @@ class ExaminerController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function assign(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|exists:users,id',
+            'examiner_id' => 'required|exists:users,id',
+        ]);
+
+        $examiner = User::findOrFail($request->examiner_id);
+        $examiner->assignedStudents()->syncWithoutDetaching([$request->student_id]);
+
+        return response()->json(['message' => 'Examiner assigned successfully']);
+    }
+
 }

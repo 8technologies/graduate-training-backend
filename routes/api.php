@@ -110,19 +110,21 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
         'student_progress' => StudentMilestoneSubmissionController::class
     ]);
     Route::post('/student_progress/{submission}/versions', [StudentMilestoneSubmissionController::class, 'addVersion']);
-    
+    Route::get('/submissions/{id}/download', [StudentMilestoneSubmissionController::class, 'download']);
+    Route::post('signoff', [StudentMilestoneSubmissionController::class, 'approveVersion']);
 
-     // student progress
+     // complaints
     Route::apiResources([
         'complaints' => ComplaintController::class
     ]);
-
     Route::post('complaints/reply/{id}' , [ComplaintController::class, 'reply']);
 
-
-    Route::get('/submissions/{id}/download', [StudentMilestoneSubmissionController::class, 'download']);
-
-    Route::post('signoff', [StudentMilestoneSubmissionController::class, 'approveVersion']);
+    // Examiners
+    Route::apiResources([
+        'examiners' => ExaminerController::class
+    ]);
+    Route::post('/examiner/assign', [ExaminerController::class, 'assign']);
+    Route::post('/submission/{id}/grade', [StudentMilestoneSubmissionController::class, 'grade']);
 
 
 });
@@ -145,10 +147,7 @@ Route::get('supervisors/{id}', [SupervisorController::class, 'show']); // ✅ Ge
 Route::put('supervisors/{id}', [SupervisorController::class, 'update']); // ✅ Update a supervisor
 Route::delete('supervisors/{id}', [SupervisorController::class, 'destroy']); // ✅ Delete a supervisor
 
-// Examiners
-Route::apiResources([
-    'examiners' => ExaminerController::class
-]);
+
 
 //users
 

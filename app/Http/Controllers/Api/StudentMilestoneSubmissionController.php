@@ -13,6 +13,7 @@ use App\Models\Student;
 use App\Models\ProgramTrack;
 use App\Models\StudentMilestoneSubmission ;
 use App\Models\SubmissionVersion;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -85,6 +86,7 @@ class StudentMilestoneSubmissionController extends Controller
 
         return [
             'submission_id' => $submission->id,
+            'student_id' => $submission->student_id,
             'milestone_id' => $submission->milestone_id,
             'status' => $submission->status,
             'versions' => $versions,
@@ -289,4 +291,27 @@ class StudentMilestoneSubmissionController extends Controller
             return response()->json(['error' => 'Failed to approve version: ' . $e->getMessage()], 500);
         }
     }
+
+    public function grade(Request $request, $id)
+{
+    $submission = StudentMilestoneSubmission::findOrFail($id);
+
+    // Ensure this examiner is assigned to the student
+    $examiner = User::findOrFail(38);//auth()->user();
+    if (!$examiner->assignedStudents->contains($submission->student_id)) {
+        return response()->json(['message' => 'Not authorized'], 403);
+    }
+
+    $request->validate([
+        'grade' => 'required|string|max:10',
+    ]);
+
+    $submission->grade = $request->grade;
+    // $submission->graded_by = $examiner->id;
+    // $submission->graded_at = now();
+    $submission->save();
+
+    return response()->json(['message' => 'Submission graded']);
+}
+
 }
