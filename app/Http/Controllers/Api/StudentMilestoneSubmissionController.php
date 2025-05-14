@@ -297,7 +297,7 @@ class StudentMilestoneSubmissionController extends Controller
     $submission = StudentMilestoneSubmission::findOrFail($id);
 
     // Ensure this examiner is assigned to the student
-    $examiner = User::findOrFail(38);//auth()->user();
+    $examiner = auth()->user();
     if (!$examiner->assignedStudents->contains($submission->student_id)) {
         return response()->json(['message' => 'Not authorized'], 403);
     }
