@@ -89,6 +89,7 @@ class StudentMilestoneSubmissionController extends Controller
             'student_id' => $submission->student_id,
             'milestone_id' => $submission->milestone_id,
             'status' => $submission->status,
+            'grade' => $submission->grade,
             'versions' => $versions,
             'approved_version' =>$submission->approvedVersion(),
             'latest_version' => $submission->latestVersion()
@@ -307,6 +308,7 @@ class StudentMilestoneSubmissionController extends Controller
     ]);
 
     $submission->grade = $request->grade;
+    $submission->status = 'graded';
     // $submission->graded_by = $examiner->id;
     // $submission->graded_at = now();
     $submission->save();
