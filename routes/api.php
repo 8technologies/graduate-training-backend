@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\ExaminerController;
 use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\ResourceController;
 use App\Http\Controllers\Api\SponsorshipTypeController;
 use App\Http\Controllers\Api\StudentMilestoneSubmissionController;
 use App\Http\Controllers\Api\RolePermissionController;
@@ -126,10 +127,13 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
     Route::post('/examiner/assign', [ExaminerController::class, 'assign']);
     Route::post('/submission/{id}/grade', [StudentMilestoneSubmissionController::class, 'grade']);
 
+    // Route::apiResource('resources', ResourceController::class);
 
 });
 
-
+Route::apiResource('resources', ResourceController::class);
+Route::get('/resources/{id}/download', [ResourceController::class, 'download']);
+   
 Route::get('studentlevels', [LevelController::class, 'index']);
 Route::post('studentlevels', [LevelController::class, 'store']);
 
