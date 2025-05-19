@@ -20,7 +20,9 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        return response()->json(Resource::with('program')->latest()->get());
+
+        return $this->responseSuccess(Resource::with('program')->latest()->get(), 'Successfully retrieved all resources');
+        // return response()->json(Resource::with('program')->latest()->get());
     }
 
 
@@ -47,9 +49,23 @@ class ResourceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ResourceRequest $request, Resource $resource)
+    public function update(Request $request, Resource $resource)
     {
-        $validated = $request->validated();
+        $validated = $request->validate([
+            
+           'title' => 'sometimes|required|string|max:255',
+            'type' => 'string',
+            'description' => 'nullable|string',
+            'author' => 'nullable|string',
+            'year' => 'nullable|string',
+            'program_id' => '',
+            'format' => 'string',
+            'url' => 'nullable|url',
+            'file' => 'nullable|file|mimes:pdf,doc,docx',
+        ]);
+        
+        Log::info($validated);
+        
 
         if ($request->hasFile('file')) {
             $path = $request->file('file')->store('resources', 'public');

@@ -131,8 +131,9 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
 
 });
 
-Route::apiResource('resources', ResourceController::class);
+Route::apiResource('resources', ResourceController::class)->except('update');
 Route::get('/resources/{id}/download', [ResourceController::class, 'download']);
+Route::post('/resources/{resource}', [ResourceController::class, 'update']);
    
 Route::get('studentlevels', [LevelController::class, 'index']);
 Route::post('studentlevels', [LevelController::class, 'store']);
