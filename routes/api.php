@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\DurationUnitController;
 use App\Http\Controllers\Api\MilestoneProfileController;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\ComplaintController;
+use App\Http\Controllers\Api\EventsController;
 use App\Http\Controllers\Api\ExaminerController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\ResourceController;
@@ -127,7 +128,7 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
     Route::post('/examiner/assign', [ExaminerController::class, 'assign']);
     Route::post('/submission/{id}/grade', [StudentMilestoneSubmissionController::class, 'grade']);
 
-    // Route::apiResource('resources', ResourceController::class);
+    Route::apiResource('events', EventsController::class);
 
 });
 
