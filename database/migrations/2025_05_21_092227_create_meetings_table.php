@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('supervisor_id')->constrained('users')->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->dateTime('scheduled_at');
-            $table->enum('mode', ['online', 'physical']);
+            $table->dateTime('scheduled_at')->nullable();
+            $table->enum('mode', ['online', 'physical'])->nullable();
             $table->string('location')->nullable(); // Physical location or URL
             $table->timestamps();
 

@@ -40,11 +40,25 @@ class MeetingController extends Controller
 
 
     /**
-     * Display the specified resource.
+     * Student request meeting.
      */
-    public function show(Meeting $meeting)
+    public function MeetingRequest(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'student_id' => 'required|exists:users,id',
+            'supervisor_id' => 'required|exists:users,id',
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+            // 'scheduled_at' => 'required|date',
+            // 'mode' => 'required|in:online,physical',
+            // 'location' => 'required|string',
+        ]);
+
+        $validated['status'] = 'pending_request';
+
+        $meeting = Meeting::create($validated);
+
+        return response()->json(['message' => 'Meeting request has been sent', 'meeting' => $meeting], 201);
     }
 
     /**

@@ -132,6 +132,7 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
     Route::apiResource('events', EventsController::class);
 
     Route:: apiResource('meeting', MeetingController::class);
+    Route:: post('/meeting/request', [MeetingController::class, 'MeetingRequest']);
 
 });
 
