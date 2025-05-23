@@ -15,6 +15,7 @@ class Meeting extends Model
         'scheduled_at',
         'mode',
         'location',
+        'status'
     ];
 
     public function student() {

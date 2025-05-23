@@ -49,7 +49,7 @@ class MeetingController extends Controller
             'supervisor_id' => 'required|exists:users,id',
             'title' => 'required|string',
             'description' => 'nullable|string',
-            // 'scheduled_at' => 'required|date',
+            'status' => '',
             // 'mode' => 'required|in:online,physical',
             // 'location' => 'required|string',
         ]);
@@ -81,6 +81,7 @@ class MeetingController extends Controller
             'description' => 'nullable|string',
             'scheduled_at' => 'required|date',
             'mode' => 'required|in:online,physical',
+            'status'=> 'string',
             'location' => 'required|string',
         ]);
         $meeting = Meeting::find($id);
@@ -94,6 +95,7 @@ class MeetingController extends Controller
      */
     public function destroy(Meeting $meeting)
     {
-        //
+        $meeting->delete();
+        return response()->json(null, 204);
     }
 }
