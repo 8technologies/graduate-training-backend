@@ -11,46 +11,55 @@ use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
 
+use App\Http\Requests\StudentRequest;
+use App\Events\GlobalEvent;
+
 class AlumniController extends Controller
 {
     use HttpApiResponseTrait;
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    
+    public function index(Request $request)
     {
-        $role_id = Role::where('name', 'alumni');
-        $alumni = User::where('role_id', $role_id)->with('students');
-        
-        return $this->responseSuccess($alumni, 'Successfully retrieved all alumni');
+        $students = Student::where(['university_id' => 1])
+        ->whereHas('user.roles', function ($query) {
+            $query->where('name', 'alumni'); // or whereIn if multiple roles
+        })
+       
+        ->with('program', 'user', 'studentIntake', 'sponsorshipType', 'supervisor', 'user.assignedExaminers')->get();
+        return $this->responseSuccess($students, 'Successfully retrieved all alumni');
     }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AluminiRequest $request)
+
+        public function store(StudentRequest $request): JsonResponse
     {
-        $validated = $request->validated();
-        $alumni = User::create([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'password'=> $validated['password'],
-            'telephone' => $validated['telephone'],
-        ]);
+        try {
+            $validated = $request->validated();
+            $validated['university_id'] = 1;
+            $user = User::create($validated);
 
-        $alumni->student()->updateOrCreate(
-            ['user_id' => $alumni->id,
-            // "program_details" => $validated['program_details'],
-            "academic_history"=> $validated['academic_history'], 
-            'achievements' => $validated['achievements'], 
-        ], // Condition
-           
-        );
+            $user->student()->Create(
+                $validated
+            );
 
+            $user->assignRole('alumni');
 
-        return $this->responseSuccess($alumni, "Successfully Created Program", JsonResponse::HTTP_CREATED);
+            $user->sendEmailVerificationNotification();
+            event(new GlobalEvent(
+                $validated['email'],
+                "Your default password is: {$validated['student_number']}. You are advised to change it.",
+                'Welcome'
+            ));
+            return $this->responseSuccess($user, "Alumni created successfully", JsonResponse::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -107,7 +116,36 @@ class AlumniController extends Controller
 
         $alumni->student()->delete();
 
-        return $this->responseSuccess('University deleted successfully',  $alumni);
+        return $this->responseSuccess('Alumni deleted successfully',  $alumni);
 
+    }
+
+     // Approve Alumni
+    public function approve(Request $request, $id)
+    {
+        // Ensure the authenticated user is an admin
+        /* if (!$request->user()->hasRole('admin')) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        } */
+
+        // Find alumni profile
+        $alumniProfile = Student::find($id);
+
+        if (!$alumniProfile) {
+            return response()->json([
+                'message' => 'Alumni profile not found'
+            ], 404);
+        }
+
+        // Approve alumni
+        $alumniProfile->training_status = 'completed';
+        $alumniProfile->save();
+
+        return response()->json([
+            'message' => 'Alumni approved successfully',
+            'alumni' => $alumniProfile
+        ]);
     }
 }

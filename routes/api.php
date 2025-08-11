@@ -143,10 +143,12 @@ Route::post('/resources/{resource}', [ResourceController::class, 'update']);
 Route::get('studentlevels', [LevelController::class, 'index']);
 Route::post('studentlevels', [LevelController::class, 'store']);
 
-//Students
+//alumni
 Route::apiResources([
     'alumni' => AlumniController::class
 ]);
+Route::post('alumni/approve/{id}', [AlumniController::class, 'approve']);
+
 
 
 //Supervisors

@@ -24,7 +24,11 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $students = Student::where(['university_id' => $request->user()->university_id])->with('program', 'user', 'studentIntake', 'sponsorshipType', 'supervisor', 'user.assignedExaminers')->get();
+        $students = Student::where(['university_id' => $request->user()->university_id])
+        ->whereHas('user.roles', function ($query) {
+            $query->where('name', 'student'); // or whereIn if multiple roles
+        })
+        ->with('program', 'user', 'studentIntake', 'sponsorshipType', 'supervisor', 'user.assignedExaminers')->get();
         return $this->responseSuccess($students, 'Successfully retrieved all Students');
     }
     /**
