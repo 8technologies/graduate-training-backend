@@ -42,7 +42,7 @@ class AlumniController extends Controller
 
         $alumni->student()->updateOrCreate(
             ['user_id' => $alumni->id,
-            "program_details" => $validated['program_details'],
+            // "program_details" => $validated['program_details'],
             "academic_history"=> $validated['academic_history'], 
             'achievements' => $validated['achievements'], 
         ], // Condition
