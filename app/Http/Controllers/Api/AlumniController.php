@@ -83,29 +83,59 @@ class AlumniController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(AluminiRequest $request, string $id)
-    {
-        $validated = $request->validated();
-        $user = User::find($id);
-        
-        $user->update([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'telephone' => $validated['telephone'],
-        ]);
-        $user->student()->updateOrCreate(
-            ['user_id' => $user->id,
-            "program_details" => $validated['program_details'],
-            "academic_history"=> $validated['academic_history'], 
-            'achievements' => $validated['achievements'], 
-        ], // Condition
-           
-        );
+    public function updateAlumni(Request $request, $id)
+{
+    // Validate input
+    $validated = $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'telephone' => 'nullable|string|max:255',
+        'avatar' => 'nullable|string|max:255',
+        'DOB' => 'nullable|date',
+        'address' => 'nullable|string|max:255',
+        'gender' => 'nullable|in:male,female',
+        'achievements' => 'nullable|string',
+        'professional_growth' => 'nullable|string',
+        'graduation_year' => 'nullable|integer|min:1950|max:' . date('Y'),
+        'about' => 'nullable|string',
+        'company' => 'nullable|string|max:255',
+        'position' => 'nullable|string|max:255',
+    ]);
 
-        return $this->responseSuccess('Alumni data updated successfully',  $user);
+    // Find the alumni student record
+    $student = Student::findOrFail($id);
 
-    }
+    // Find related user record
+    $user = User::findOrFail($student->user_id);
+
+    // Update user details
+    $user->first_name = $validated['first_name'];
+    $user->last_name = $validated['last_name'];
+    $user->email = $validated['email'];
+    $user->telephone = $validated['telephone'] ?? $user->telephone;
+    $user->avatar = $validated['avatar'] ?? $user->avatar;
+    $user->save();
+
+    // Update student details
+    $student->DOB = $validated['DOB'] ?? $student->DOB;
+    $student->address = $validated['address'] ?? $student->address;
+    $student->gender = $validated['gender'] ?? $student->gender;
+    $student->achievements = $validated['achievements'] ?? $student->achievements;
+    $student->professional_growth = $validated['professional_growth'] ?? $student->professional_growth;
+    $student->graduation_year = $validated['graduation_year'] ?? $student->graduation_year;
+    $student->about = $validated['about'] ?? $student->about;
+    $student->company = $validated['company'] ?? $student->company;
+    $student->position = $validated['position'] ?? $student->position;
+    $student->save();
+
+    return response()->json([
+        'message' => 'Alumni updated successfully',
+        'user' => $user,
+        'student' => $student
+    ]);
+}
+
 
     /**
      * Remove the specified resource from storage.
@@ -145,6 +175,28 @@ class AlumniController extends Controller
 
         return response()->json([
             'message' => 'Alumni approved successfully',
+            'alumni' => $alumniProfile
+        ]);
+    }
+
+    public function reject(Request $request, $id)
+    {
+        
+        // Find alumni profile
+        $alumniProfile = Student::find($id);
+
+        if (!$alumniProfile) {
+            return response()->json([
+                'message' => 'Alumni profile not found'
+            ], 404);
+        }
+
+        // Approve alumni
+        $alumniProfile->training_status = 'rejected';
+        $alumniProfile->save();
+
+        return response()->json([
+            'message' => 'Alumni application rejected',
             'alumni' => $alumniProfile
         ]);
     }

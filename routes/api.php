@@ -148,8 +148,7 @@ Route::apiResources([
     'alumni' => AlumniController::class
 ]);
 Route::post('alumni/approve/{id}', [AlumniController::class, 'approve']);
-
-
+Route::post('alumni/reject/{id}', [AlumniController::class, 'reject']);
 
 //Supervisors
 //Route::get('supervisors',[SupervisorController::class,'getAllSupervisors']);
@@ -158,8 +157,6 @@ Route::post('supervisors', [SupervisorController::class, 'store']); // ✅ Creat
 Route::get('supervisors/{id}', [SupervisorController::class, 'show']); // ✅ Get a single supervisor
 Route::put('supervisors/{id}', [SupervisorController::class, 'update']); // ✅ Update a supervisor
 Route::delete('supervisors/{id}', [SupervisorController::class, 'destroy']); // ✅ Delete a supervisor
-
-
 
 //users
 
