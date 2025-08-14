@@ -22,16 +22,56 @@ class EventsController extends Controller
         return $this->responseSuccess($events, 'Successfully retrieved all Events');
     }
 
+    // public function index(Request $request): JsonResponse
+    // {
+    //     $query = Event::query();
+
+    //     // Apply filters
+    //     $query->byCategory($request->category)
+    //           ->byStatus($request->status)
+    //           ->search($request->search)
+    //           ->sortBy($request->sort_by ?? 'date');
+
+    //     // Handle featured events
+    //     if ($request->featured) {
+    //         $query->featured();
+    //     }
+
+    //     $events = $query->paginate($request->per_page ?? 12);
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'data' => new EventCollection($events),
+    //         'meta' => [
+    //             'total' => $events->total(),
+    //             'per_page' => $events->perPage(),
+    //             'current_page' => $events->currentPage(),
+    //             'last_page' => $events->lastPage()
+    //         ]
+    //     ]);
+    // }
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(EventRequest $request)
+    /* public function store(EventRequest $request)
     {
         $validated = $request->validated();
         $event = Event::create($validated);
 
         return $this->responseSuccess($event, "Successfully Created an Event", JsonResponse::HTTP_CREATED);
+    } */
+
+    public function store(EventRequest $request): JsonResponse
+    {
+        $event = Event::create($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Event created successfully',
+            'data' => $event
+        ], 201);
     }
 
     /**

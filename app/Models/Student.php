@@ -9,10 +9,11 @@ use Illuminate\Support\Str;
 class Student extends Model
 {
     use HasFactory;
-
-
     protected $guarded = ['id'];
-
+    
+    protected $casts = [
+        'achievements' => 'array',
+    ];
 
     public function user()
     {

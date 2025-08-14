@@ -129,12 +129,14 @@ Route::middleware([MiddlewareAuth::class])->group(function () {
     Route::post('/examiner/assign', [ExaminerController::class, 'assign']);
     Route::post('/submission/{id}/grade', [StudentMilestoneSubmissionController::class, 'grade']);
 
-    Route::apiResource('events', EventsController::class);
+    // Route::apiResource('events', EventsController::class);
 
     Route:: apiResource('meeting', MeetingController::class);
     Route:: post('/meeting/request', [MeetingController::class, 'MeetingRequest']);
 
 });
+
+Route::apiResource('events', EventsController::class);
 
 Route::apiResource('resources', ResourceController::class)->except('update');
 Route::get('/resources/{id}/download', [ResourceController::class, 'download']);
